@@ -22,7 +22,7 @@ towards public health. As always, if you ever need support or help (or just need
 the class), you can take advantage of any of the following resources:
 - Piazza
 - Office Hours
-- Emailing ph142@berkeley.edu
+- Emailing 142gsi@berkeley.edu
 
 Looking forward to the six weeks we have together,
 Your PH 142 Teaching Staff~

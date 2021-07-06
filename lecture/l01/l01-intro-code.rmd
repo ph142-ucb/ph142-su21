@@ -1,25 +1,6 @@
 ---
 title: 'Welcome to PH142: PPDAC and Starting to look at Data: lecture code'
 output:
-  beamer_presentation:
-    slide_level: 3
-  ioslides_presentation: default
-  slidy_presentation: default
-header-includes:
-- \usetheme{Goettingen}
-- \renewcommand{\textbf}{\structure}
-- \renewcommand{\mathbf}{\structure}
-- \addtobeamertemplate{navigation symbols}{}{ \usebeamerfont{footline} }
-- \addtobeamertemplate{navigation symbols}{}{ \usebeamercolor[fg]{footline} }
-- \addtobeamertemplate{navigation symbols}{}{ \insertframenumber/\inserttotalframenumber
-  }
-- \usepackage[os=win]{menukeys}
-- \usepackage{soul}
-- \usepackage{xcolor}
-- \usepackage{caption}
-- \usepackage[os=win]{menukeys}
-- \usepackage{copyrightbox}
-classoption: aspectratio=169
 ---
 
 <!-- libraries -->
@@ -29,37 +10,6 @@ library(dplyr)
 library(forcats)
 ```
 
-<!-- define default size for R graphics -->
-```{r,include=FALSE,purl=FALSE}
-outputFormat<-opts_knit$get('rmarkdown.pandoc.to')
-if(outputFormat=="beamer"){
-  opts_chunk$set(fig.width=6,fig.height=4)
-}
-```
-
-<!-- define function for external images -->
-```{r,include=FALSE,purl=FALSE}
-image<-function(ff,ss,cc=NULL,ll=NULL){
-  if(is.null(cc)){
-    paste('\\centering','\n',
-          '\\includegraphics[scale=',ss,']{',ff,'}',
-          sep='')
-  } else {
-    paste('\\centering','\n',
-          '\\copyrightbox[b]{',
-          '\\includegraphics[scale=',ss,']{',ff,'}',
-          '}{\\raggedleft{\\tiny \\href{',ll,'}{',cc,'}}}',
-          sep='')    
-  }
-}
-```
-
-<!-- define function for links -->
-```{r,include=FALSE,purl=FALSE}
-link<-function(tt,ll){
-  paste('[\\textcolor[HTML]{ffa328}{\\ul{',tt,'}}]','(',ll,')',sep='')
-}
-```
 
 ### Today's Goals
 

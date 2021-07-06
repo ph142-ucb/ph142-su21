@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Instructions 
-* Due date: Tuesday, July 06.
+* Due date: Tuesday, July 09.
 * Late penalty: 50% late penalty if submitted within 24 hours of due date, no 
 marks for assignments submitted thereafter.
 * This assignment is graded on **correct completion**, all or nothing. You must pass all public tests and submit the assignment for credit.

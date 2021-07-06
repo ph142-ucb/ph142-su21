@@ -1,0 +1,566 @@
+---
+title: 'Welcome to PH142: PPDAC and Starting to look at Data: lecture code'
+output:
+  beamer_presentation:
+    slide_level: 3
+  ioslides_presentation: default
+  slidy_presentation: default
+header-includes:
+- \usetheme{Goettingen}
+- \renewcommand{\textbf}{\structure}
+- \renewcommand{\mathbf}{\structure}
+- \addtobeamertemplate{navigation symbols}{}{ \usebeamerfont{footline} }
+- \addtobeamertemplate{navigation symbols}{}{ \usebeamercolor[fg]{footline} }
+- \addtobeamertemplate{navigation symbols}{}{ \insertframenumber/\inserttotalframenumber
+  }
+- \usepackage[os=win]{menukeys}
+- \usepackage{soul}
+- \usepackage{xcolor}
+- \usepackage{caption}
+- \usepackage[os=win]{menukeys}
+- \usepackage{copyrightbox}
+classoption: aspectratio=169
+---
+
+<!-- libraries -->
+```{r,include=FALSE,purl=FALSE}
+library(knitr) # for include_graphics() 
+library(dplyr)
+library(forcats)
+```
+
+<!-- define default size for R graphics -->
+```{r,include=FALSE,purl=FALSE}
+outputFormat<-opts_knit$get('rmarkdown.pandoc.to')
+if(outputFormat=="beamer"){
+  opts_chunk$set(fig.width=6,fig.height=4)
+}
+```
+
+<!-- define function for external images -->
+```{r,include=FALSE,purl=FALSE}
+image<-function(ff,ss,cc=NULL,ll=NULL){
+  if(is.null(cc)){
+    paste('\\centering','\n',
+          '\\includegraphics[scale=',ss,']{',ff,'}',
+          sep='')
+  } else {
+    paste('\\centering','\n',
+          '\\copyrightbox[b]{',
+          '\\includegraphics[scale=',ss,']{',ff,'}',
+          '}{\\raggedleft{\\tiny \\href{',ll,'}{',cc,'}}}',
+          sep='')    
+  }
+}
+```
+
+<!-- define function for links -->
+```{r,include=FALSE,purl=FALSE}
+link<-function(tt,ll){
+  paste('[\\textcolor[HTML]{ffa328}{\\ul{',tt,'}}]','(',ll,')',sep='')
+}
+```
+
+### Today's Goals
+
+Welcome and orientation to the class - answer questions
+
+My goals for our time together
+
+Talk about the framework we use in the class (PPDAC)
+
+Introduce some data visualizations using R 
+
+## PPDAC Example 1: A smoking behaviour study
+
+### PPDAC Example
+Problem: Suppose we wish to study the smoking behavior of California residents aged
+14-20 years. 
+
+In particular, we are interested in the *prevalence* of current smoking by
+gender.
+
+What type of problem is this?
+
+### PPDAC Example
+Plan: We need to first choose a time period, because we know that smoking behavior 
+has changed immensely over time. It is unfeasible to gather these data for all residents
+in California who are 14-20 years old. 
+
+Instead we conduct a *random sample* of size $n$ persons.
+We collect their: age, gender, and smoking status.
+
+Note that we need to decide how large $n$ should be, and how to obtain the random sample.
+The latter question is, in particular, very important if we want to ensure that our sample is 
+representative of the population of interest. Time and money also constrain how the sample
+will be collected.
+
+### PPDAC Example
+Data: Suppose that a random sample of 200 persons aged 14-20 was selected, yielding these data:
+
+|Gender                | Number of smokers | Number of non-smokers | Total |
+|----------------------|-------------------|-----------------------|-------|
+| Teen girls and women | 32 | 66 | 98  |
+| Teen boys and men    | 27 | 75 | 102 |
+| Total                | 59 | 141| 200 |
+
+### PPDAC Example
+Analysis: The proportion of women in the sample who smoke is 32/98 = 33%.
+The proportion of men in the sample who smoke is 27/102 = 26%.
+
+We would also like some idea as to how close this estimate is likely to be from the
+actual proportion in the population. 
+
+If we selected a second random sample of the same size, we would likely estimate different proportions for men and women. We 
+will learn how to estimate the precision of these estimates.
+
+### PPDAC Example
+Conclusion: 33% of girls and women aged 14-20 and 26% of boys and men of the same
+age group are current smokers in California in 2018 (plus a measure of uncertainty).
+
+
+
+```{r lib-load, echo = FALSE, message=FALSE, warning=FALSE}
+##this code chunk adds in the packages I use later in the file
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(glue)
+```
+
+```{r choose-your-state, echo=FALSE}
+my_state <- "California"
+```
+
+## Example 2: Life expectancy for non-Hispanic black and white men and women in `r my_state` between 1969-2013
+
+### Introduction 
+
+Life expectancy is one of the core measures used in public health to comment on 
+the well-being of groups of people. Differences in life expectancy by race/ethnicity,
+for individuals living in the same region can reflect underlying inequalities in
+policies, access to care, food environments, structural and systemic racism, among
+other potential causes.
+
+### Research objective (Problem)
+
+The purpose of this short report is to visualize life expectancy among black and 
+white men and women in `r my_state` between 1969 and 2013. 
+
+We are interested in whether there are differences by group and whether these differences 
+have changed over time.
+
+What type of problem is this?
+
+### Plan
+
+Death certificates in the United States include race/ethnicity, age at death, 
+and date of death and capture all deaths of US residents. These data are aggregated by the 
+[CDC's National Cancer Institute](https://seer.cancer.gov/seerstat/) into the 
+SEER*Stat software. Previously, Riddell et al.^1^, analyzed these data to 
+compute estimated trends in life expectancy for non-Hispanic black and white men 
+and women, for 40 US states between 1969 and 2013. States without enough data were
+excluded from these analyses.
+
+To carry out this short report, we will use data from Riddell et al. to 
+visualize trends in life expectancy as part of an exploratory data analysis. In 
+particular, we will plot time trends for black and white men and women in 
+`r my_state`.
+
+### Data
+
+Here are the first few rows of these data for `r my_state`:
+```{r import-and-filter-data, echo=F, message=F }
+le_data <- read_csv("Life-expectancy-by-state-long.csv")
+
+my_state_data <- le_data %>% 
+  filter(state == my_state) %>%
+  mutate(gender = case_when(sex == "Female" ~ "Women",
+                            sex == "Male" ~ "Men")) %>%
+  select(-sex)
+```
+![](ca_le.png)
+
+### Analysis
+
+```{r first-look-time-plots, echo=F, fig.width=12}
+ggplot(data = my_state_data, aes(x = year, y = LE)) + 
+  geom_line(aes(col = race)) + 
+  facet_wrap(~ gender) +
+  labs(y = "Life expectancy (years)",
+       title = glue("Trends in life expectancy for black and white men and women in {my_state}")
+  ) +
+  theme_minimal(base_size = 15)
+```
+
+### Analysis
+
+```{r reshape-and-compute-LE-difference, echo=F, fig.width=12}
+my_state_data_wide <- my_state_data %>% 
+  spread(key = race, value = LE) %>%
+  mutate(le_difference = white - black)
+
+ggplot(my_state_data_wide, aes(x = year, y = le_difference)) + 
+  geom_line() +
+  facet_wrap(~ gender) +
+  labs(y = "Difference in life expectancy (years)",
+       title = glue("Difference in life expectancy between black and white men and women in {my_state}")
+       ) +
+  theme_minimal(base_size = 15)
+```
+
+### Conclusion
+
+The difference in life expectancy in 1969 between non-Hispanic blacks and whites was `r my_state_data_wide %>% filter(year == 1969, gender == "Men") %>% select(le_difference) %>% round(1)` years for men and `r my_state_data_wide %>% filter(year == 1969, gender == "Women") %>% select(le_difference) %>% round(1)` for women in `r my_state`. 
+
+By 2013, the difference was `r my_state_data_wide %>% filter(year == 2013, gender == "Men") %>% select(le_difference) %>% round(1)` years for men and `r my_state_data_wide %>% filter(year == 2013, gender == "Women") %>% select(le_difference) %>% round(1)` for women in `r my_state`.
+
+## Visualizations for categorical data
+
+### Example: infectious disease data
+
+- Task: Make a bar chart of the percent of cases on infectious disease for each 
+category of disease.
+- First, read and view the infectious disease data from Baldi and Moore:
+
+```{r make-bar-chart}
+id_data <- read_csv("Ch01_ID-data.csv")
+```
+
+### Example: infectious disease data
+```{r show-id}
+id_data
+```
+
+### Example: infectious disease data
+- Note the variables `number_cases` and `percent_cases`
+- What do you want the bar chart to display? What is the x and y variables for 
+a bar chart?
+
+
+## Introducing ggplot
+
+### First step to building a `ggplot()`: set up the canvas
+
+- The first line of code below pulls in the ggplot package
+- The second line of code below specifies the `data` set and what goes on the `x` and `y` axes
+
+```{r, fig.height = 4, fig.width = 9.5, echo=FALSE}
+library(ggplot2)
+ggplot(id_data, aes(x = disease, y = percent_cases)) 
+```
+
+### Next choose a function
+
+- We will use a `geom_` function to create our chart
+
+
+`ggplot()`'s `geom_bar()` makes a bar chart
+
+
+### Syntax for bar charts 
+
+ggplot(id_data, aes(x = disease, y = percent_cases)) + 
+
+  geom_bar(stat = "identity") 
+  
+ stat = "identity" tells geom_bar that we supplied a y variable that is exactly what we want to plot. 
+ 
+ We do not need geom_bar() to calculate the number or percent for us.
+ 
+### `ggplot()`'s `geom_bar()` makes a bar chart
+
+```{r, fig.height = 4, fig.width = 9.5, echo=FALSE}
+ggplot(id_data, aes(x = disease, y = percent_cases)) + 
+  geom_bar(stat = "identity")
+```
+
+### some additions to ggplot for style
+
+
+```{r, fig.height = 4, fig.width = 9.5, echo=FALSE}
+ggplot(id_data, aes(x = disease, y = percent_cases)) + 
+  geom_bar(stat = "identity") +
+   labs(y = "Percent", x = "") +
+  theme_minimal(base_size = 15) 
+```
+
+ base_size controls the font size on these plots
+ 
+ theme_minimal affects the "look" of the plot it removes the grey background and adds grey gridlines
+
+
+
+### `fct_reorder` reorders `disease` according to value of `percent_cases`
+
+```{r bar-ordered, fig.height = 4, fig.width = 9.5}
+id_data <- id_data %>% 
+  mutate(disease_ordered = fct_reorder(disease, percent_cases, .desc = T))
+```
+
+### Re-ordered plot
+```{r ordered, fig.height = 4, fig.width = 9.5, echo=FALSE}
+ggplot(id_data, aes(x = disease_ordered, y = percent_cases)) + 
+  geom_bar(stat = "identity") + 
+  labs(y = "Percent", x = "") +
+  theme_minimal(base_size = 15)
+```
+
+### Use `aes(fill = type)` to link the bar's fill to the disease type
+
+  geom_bar(stat = "identity", aes(fill = type)) +
+
+   theme(legend.position = "top")
+
+### Use `aes(fill = type)` to link the bar's fill to the disease type
+```{r bar-coloured, echo=FALSE, fig.height = 5, fig.width = 9.5}
+ggplot(id_data, aes(x = disease_ordered, y = percent_cases)) + 
+  geom_bar(stat = "identity", aes(fill = type)) +
+  labs(y = "Percent", x = "") +
+  theme_minimal(base_size = 15) +
+  theme(legend.position = "top")
+```
+
+## Visualizing quantitative variables
+
+### Visualize quantitative variables using histograms 
+
+- Histograms look a lot like bar charts, except that the bars touch because the 
+underlying scale is continuous and the order of the bars matters
+- In order to make a histogram, the underlying data needs to be **binned** into 
+categories and the number or percent of data in each category becomes the height 
+of each bar. 
+- the **bins** devide the entire range of data into a series of intervals and counts
+the number of observations in each interval
+- the intervals must be consecutive and non-overlapping and are almost always chosen to be of equal size
+
+### Example:  opioid state prescription rates
+
+- The textbook gives an example using data from 2012.
+- In the data folder, there is updated data from 2018. It came from the paper:
+“Opioid Prescribing Rates by Congressional Districts, United States, 2016”, by 
+Rolheiser et al. [link](https://ajph.aphapublications.org/doi/10.2105/AJPH.2018.304532)
+
+### Example:  opioid state prescription rates
+Problem:  To determine the extent to which opioid prescribing rates vary across US congressional districts.
+
+Plan: In an observational cross-sectional framework using secondary data, they constructed 2016 congressional district–level opioid prescribing rate estimates using a population-weighted methodology.
+
+Data:  In the data structure we have State as the unit of analysis, and measured perscription rates as the variable of interest
+
+
+### Example:  opioid state prescription rates
+
+```{r read-opi-data}
+opi_data <- read.csv("Ch01_opioid-data.csv")
+head(opi_data)
+```
+
+- `Mean` provides the mean prescribing rate per 100 individuals. Thus, a mean
+of 121.31 implies that in Alabama, there were 121.31 opioid prescriptions per 100 
+persons, an average across the 7 congressional districts.
+
+### Histogram of opioid prescription rates
+
+- Task: Make a histogram of the average prescribing rates across US states
+- What is the x variable? What is the y variable? 
+- What `geom` should be used?
+
+### Histogram of opioid prescription rates - default is 30 bins
+ggplot(data = opi_data, aes(x = Mean)) + 
+
+  geom_histogram(col = "white") +
+
+  labs(x = "Mean opioid prescription rate (per 100 individuals)", 
+
+       y = "Number of states") +
+
+  theme_minimal(base_size = 15)
+  
+### Histogram of opioid prescription rates
+```{r hist-binwidth-no-width-specified, fig.height = 4, fig.width = 8, echo=FALSE}
+ggplot(data = opi_data, aes(x = Mean)) + 
+  geom_histogram(col = "white") +
+  labs(x = "Mean opioid prescription rate (per 100 individuals)", 
+       y = "Number of states") +
+  theme_minimal(base_size = 15)
+```
+
+### same graph, change the bins `geom_histogram(binwidth = 5)`
+ggplot(data = opi_data, aes(x = Mean)) + 
+
+  geom_histogram(col = "white", binwidth = 5) +
+  
+  labs(x = "Mean opioid prescription rate (per 100 individuals)", 
+  
+       y = "Number of states") +
+  
+  theme_minimal(base_size = 15)
+
+### same graph, change the bins `geom_histogram(binwidth = 5)`
+```{r hist-binwidth-5, fig.height = 4, fig.width = 8, echo=FALSE}
+ggplot(data = opi_data, aes(x = Mean)) + 
+  geom_histogram(col = "white", binwidth = 5) +
+  labs(x = "Mean opioid prescription rate (per 100 individuals)", 
+       y = "Number of states") +
+  theme_minimal(base_size = 15)
+```
+
+### change the bins again `geom_histogram(binwidth = 10)`
+ggplot(data = opi_data, aes(x = Mean)) + 
+  
+  geom_histogram(col = "white", binwidth = 10) +
+  
+  labs(x = "Mean opioid prescription rate (per 100 individuals)", 
+  
+       y = "Number of states") +
+  
+  theme_minimal(base_size = 15)
+
+### change the bins again `geom_histogram(binwidth = 10)`
+```{r hist-binwidth-10, fig.height = 4, fig.width = 8, echo=FALSE}
+ggplot(data = opi_data, aes(x = Mean)) + 
+  geom_histogram(col = "white", binwidth = 10) +
+  labs(x = "Mean opioid prescription rate (per 100 individuals)", 
+       y = "Number of states") +
+  theme_minimal(base_size = 15)
+```
+
+## Describing your distribution - what are we looking for?
+
+### Shape, Center, Spread
+- When we examine histograms, we can make comments on a distribution's:
+    - **Shape**: Is the distribution **symmetric** or **skewed** to the left or right?
+    - **Center**: Does the histogram have one peak (unimodal), or two (bimodal) or more?
+    - **Spread**: How spread out are the values? What is the range of the data?
+    - **Outliers**: Do any of the measurements fall outside of the range of most of the data points?
+   
+### Is this skewed left or skewed right? 
+```{r twitter-not-normal, echo=F, out.width = "50%"}
+knitr::include_graphics("Ch01_Not-normal.png")
+```
+
+### Center - one hump or two?
+
+```{r modal, echo=F, out.width = "60%"}
+knitr::include_graphics("unibi.png")
+```
+
+### Outlier
+
+```{r outs, echo=F, out.width = "50%"}
+knitr::include_graphics("outlier.png")
+```
+
+## Time plots
+
+### Visualize quantitative variables over time using time plots
+
+- **Time plots** are a specific subset of line plots where the x variable is time. 
+- Unlike the previous plots, the time plot shows a relationship between two 
+variables: 
+    i) a quantitative variable 
+    ii) time 
+- Often times, these plots can be used to look for cycles (e.g., seasonal 
+patterns that recur each year) or trends (e.g., overall increases or decreases 
+seen over time).
+
+
+### Life expectancy for White men in California
+
+Make a scatter plot of the life expectancy for White men in California
+over time.
+
+Since the dataset contains 39 states across two genders and two races, first use
+a function to subset the data to contain only White men in California.
+
+Which function from last lecture do we need?
+
+* `mutate()`, `select()`, `filter()`, `rename()`, or `arrange()`?
+
+### `dplyr`'s `filter()` to select a subset of rows
+
+```{r wh-cali-dataset, echo=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+le_data <- read_csv("Life-expectancy-by-state-long.csv")
+```
+
+```{r}
+wm_cali <- le_data %>% filter(state == "California", 
+                              sex == "Male", 
+                              race == "white")
+
+#this is equivalent:
+wm_cali <- le_data %>% filter(state == "California" & sex == "Male" & race == "white")
+```
+
+### Here we use `geom_point` to make a graph with dots
+ggplot(data = wm_cali, aes(x = year, y = LE)) + 
+
+  geom_point() +
+  
+  labs(title = "Life expectancy in white men in California, 1969-2013",
+  
+       y = "Life expectancy", 
+       
+       x = "Year", 
+       
+       caption = "Data from Riddell et al. (2018)")
+
+### Here we use `geom_point` to make a graph with dots
+```{r ggplot-change-titles, out.width = "60%", fig.align='center', echo=FALSE}
+ggplot(data = wm_cali, aes(x = year, y = LE)) + geom_point() +
+  labs(title = "Life expectancy in white men in California, 1969-2013",
+       y = "Life expectancy", 
+       x = "Year", 
+       caption = "Data from Riddell et al. (2018)")
+```
+
+### `geom_line()` to make a line plot
+ggplot(data = wm_cali, aes(x = year, y = LE)) + 
+
+  geom_line(col = "blue") +
+  
+  labs(title = "Life expectancy in white males in California, 1969-2013",
+  
+       y = "Life expectancy", 
+       
+       x = "Year", 
+       
+       caption = "Data from Riddell et al. (2018)")
+
+### `geom_line()` to make a line plot
+```{r ggplot-geom_line, out.width = "60%", fig.align='center', echo=FALSE}
+ggplot(data = wm_cali, aes(x = year, y = LE)) + geom_line(col = "blue") +
+  labs(title = "Life expectancy in white males in California, 1969-2013",
+       y = "Life expectancy", 
+       x = "Year", 
+       caption = "Data from Riddell et al. (2018)")
+```
+
+### R Recap: Code we used today
+1. 'ggplot' to set up a canvas for graphics
+2. `geom_bar(stat = "identity")` to make a bar chart when you specify the y variable
+3. `geom_histogram()` to make a histogram for which ggplot needs to calculate the count
+4. `fct_reorder(var1, var2)` to reorder a categorical variable (`var1`) by a numeric variable (`var2`)
+    - from the `forcats` package
+5. `geom_point()` to make a plot with dots
+6. `geom_line()` to make a plot with lines
+
+
+    
+### We only skimmed the surface!
+
+- Here is some extra material for those of you who love data visualization. This material won't be tested.
+    - [RStudio ggplot2 cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+    - [Kieran Healy's data visualization book](https://www.amazon.com/gp/product/0691181624/ref=as_li_tl?ie=UTF8&tag=kieranhealysw-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=0691181624&linkId=16d53b3cc1ec3bc3aac60b27c29b92e8)
+
+
+### References
+
+The PPDAC method is described based on course notes from STAT 231 from the University of Waterloo (Ontario, Canada). Spring 2006 Course Packet.
+
+1. Riddell CA, Morrison KT, Harper S, Kaufman JS. Trends in the contribution of major causes of death to the black-white life expectancy gap by US state. **Health & Place**. 2018. 52:85-100. doi: 10.1016/j.healthplace.2018.04.003.  
+
+

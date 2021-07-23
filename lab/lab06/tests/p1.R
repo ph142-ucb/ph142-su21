@@ -13,7 +13,7 @@ name: p1
 "
 
 test_that("p1a", {
-  expect_true(p14 > 0 & p14 < 1)
+  expect_true(p1 > 0 & p1 < 1)
   print("Checking: range of p1")
 })
 

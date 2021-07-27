@@ -230,24 +230,6 @@ Note that `t.test` gives you both the t-test results (t-statistic (called "t" in
 the output), df, and p-value), as well as the 95% CI. We got both because we 
 performed a two-sided test.
 
-
-### Example:  Zika vaccine 2017 article
-```{r zika, out.width="80%", fig.align='center', echo=FALSE}
-knitr::include_graphics("zika.png")
-
-```
-
-### Example:  Zika vaccine
-STATISTICAL ANALYSIS
-The antibody-binding response that was assessed on ELISA is reported as the proportion of participants in whom an antibody response developed at a given time point and as the geometric mean titer (both with 95% confidence intervals). We used Fisher's exact test to determine positive response rates and Student's t-test to compare the magnitude of the log-transformed antibody response between the two dose groups and within individuals as the change from baseline. 
-
-### Example:  Zika vaccine
-```{r zika2, out.width="80%", fig.align='center' , echo=FALSE}
-knitr::include_graphics("titer.png")
-
-```
-
-
 ### Example: Transgenic chickens
 
 Infection of chickens with the avian flu is a threat to both poultry production

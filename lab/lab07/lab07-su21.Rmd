@@ -1,0 +1,317 @@
+---
+title: 'Lab 7: Introducing the Central Limit Theorem'
+output: pdf_document
+---
+
+
+### Instructions 
+* Due date: Friday, July 30 at 10:00pm PST with 2 hour grace period.
+* Late penalty: 50% late penalty if submitted within 24 hours of due date, no 
+marks for assignments submitted thereafter.
+* This assignment is graded on **correct completion**, all or nothing. You must pass all public tests and submit the assignment for credit.
+* Submission process: Follow the submission instructions on the final page. Make sure you do not remove any `\newpage` tags or rename this file, as this will break the submission.
+
+Helpful hints:
+
+- Every function you need to use was taught during lecture! So you may need to 
+revisit the lecture code to help you along by opening the relevant files on Datahub. 
+Alternatively, you may wish to view the code in the condensed PDFs posted 
+on the course website. Good luck!
+
+- Knit your file early and often to minimize knitting errors! If you copy and 
+paste code for the slides, you are bound to get an error that is hard to 
+diagnose. Typing out the code is the way to smooth knitting! We recommend 
+knitting your file each time after you write a few sentences/add a new code 
+chunk, so you can detect the source of knitting errors more easily. This will 
+save you and the GSIs from frustration! **You must knit correctly before submitting.**
+
+- If your code runs off the page of the knitted PDF then you will LOSE POINTS! To
+avoid this, have a look at your knitted PDF and ensure all the code fits in the 
+file (you can easily view it on Gradescope via the provided link after submitting). 
+If it doesn't look right, go back to your .Rmd file and add spaces (new lines) using 
+the return or enter key so that the code runs onto the next line.
+
+\newpage
+
+--------------------------------------------------------------------------------
+
+
+# (Optional) Relevant Textbook Exercises
+The following questions in your textbook are helpful practice for 
+understanding today's material:
+
+Baldi and Moore: Ex. 13.5, 13.8, 13.9, 13. 10, 13.12, 13.14
+
+
+# Introduction 
+
+You will use a central data source (a Google sheet) attached to the lab to
+develop a very concrete idea of sampling distributions, and to see the central 
+limit theorem in action.  
+
+# The underlying population
+
+Suppose you had a data frame containing the **entire population** of all
+residents of Alameda County. You have data on three variables:
+
+1.  Born either out (=1) versus in (=0) the county.
+2.  Number of siblings (integer)
+3.  Number of visits to the hospital last year
+
+Read in the data, L06_Alameda.csv (it lives in the data folder) and assign it to the name `alameda_pop`. Calculate the true (population) mean, and make histograms or bar charts of the distribution for each variable.  
+
+```{r readin, message = F, warning = F}
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+#### YOUR CODE GOES HERE ####
+
+```
+
+Notice that the distribution of number of siblings and number of hospital visits
+are discrete distributions and both skewed right. Today, we will focus on the 
+distribution of the number of siblings `num_sibs`. Remember, we know the population
+mean exactly, because we have all the data. You calculated the underlying population
+mean in the code chunk above.
+
+### Calculating the sampling distribution
+
+We are now going to look at the approximate **sampling distribution for the sample mean**
+of the `num_sibs` in (live) action. Remember from earlier lectures that a 
+**sampling distribution** is a distribution for a statistic, like the sample 
+proportion or the sample mean.
+
+Each student will be tasked with repeatedly taking a random sample of the population. 
+Once you take your sample you will compute the sample mean and add it to a 
+shared google sheet. As the data is added to the google sheet, notice how the graph 
+to the right of the data changes; this illustrate how the sampling distribution varies for 
+increasingly larger sample sizes.
+
+The GSIs will provide you the link to the communal google sheet. The columns in 
+the sheets are  `n (Sample_size)` `mean(numSibs)` `Name (your sign in)`.
+
+### Your task
+
+1. Randomly generate 10 simple random samples of size $n=5$ from the population.
+Calculate the average number of siblings for each of your samples. We wrote code
+to start you off, which you can simply copy and paste 10 times to generate ten 
+randomly drawn samples and their sample means.
+
+One sample has been provided to you. Try it yourself 10 times and record your results in the vector below.
+
+
+# STOP! Remove eval = F before continuing on.
+```{r size5, eval = F}
+#### YOUR CODE GOES HERE ####
+
+#repeat this code 10 times.
+size_5 <- sample_n(alameda_pop, 5, replace = FALSE)
+size_5 %>% summarise(mean_numSibs=mean(num_sibs))
+
+```
+
+After you've calculated 10 sample means using the above code, copy and paste your
+data into the google sheet for your lab section. The links to all the 
+google sheets are:
+
+- 101B: https://docs.google.com/spreadsheets/d/130FOigRrcdzyMpxSmzxEcdx2TOthUeKZFBpfJgHpbWk/edit?usp=sharing
+- 102B: https://docs.google.com/spreadsheets/d/1sVx2Vd_57DWNHRvQ1UP_BhaMuRUnc-H-L-f5Ujuv-fs/edit?usp=sharing
+- 103B: https://docs.google.com/spreadsheets/d/1sJpPRIyl83CcFwOyfwJCgyM1LubDZx-RvAfYwG1v8iA/edit?usp=sharing
+- 104B: https://docs.google.com/spreadsheets/d/1iOUF5bohUL3_tEHkjOjXC_bueFVLm-sA-lWtxHFLgS0/edit?usp=sharing
+- 105B: https://docs.google.com/spreadsheets/d/1PwcGfK4dKbybxFfrwXm8-H4yCzKVBzCenDaf902Btlg/edit?usp=sharing
+- 106B: https://docs.google.com/spreadsheets/d/1AP3oewsuzDDpG6oPnMEqXXjzYNY1Q2EBQjycb5aSokg/edit?usp=sharing
+
+Once the sheet is full, look at the plot of the **sampling distribution** for
+the mean number of siblings when $n=5$. 
+
+
+- What is the range of the sampling distribution of the mean? 
+
+_Type your answer here, replacing this text._
+
+
+- What is the shape of the sampling distribution of the mean? 
+
+_Type your answer here, replacing this text._
+
+
+- What is the mean of the sampling distribution of the mean? 
+
+_Type your answer here, replacing this text._
+
+
+
+Once the class has examined the sampling distribution when $n=5$, repeat the 
+same steps for n=50. 
+
+
+2. Repeat the above process for a sample size of $n=50$.
+
+```{r size50}
+#### YOUR CODE GOES HERE ####
+
+```
+
+After you calculated your 10 sample means, navigate to the google sheet from 
+before, but switch to the sheet with $n=50$ (you can switch tabs in the bottom left).
+Add your data for $n=50$.
+
+Look at the plot to the right on the google sheet; now with $n=50$
+
+- What is the range of the sampling distribution of the mean? How does it compare
+to when $n=5$?
+
+_Type your answer here, replacing this text._
+
+
+- What is the shape of the sampling distribution of the mean? How does it compare to when $n=5$? 
+
+_Type your answer here, replacing this text._
+
+
+- What is the mean of the sampling distribution of the mean? 
+
+_Type your answer here, replacing this text._
+
+
+3. Repeat the entire process for sample size $n=500$.
+
+```{r size500}
+#### YOUR CODE GOES HERE ####
+
+```
+
+- What is the range of the sampling distribution of the mean? How does it compare to when $n=5$ and $n=50$?
+
+_Type your answer here, replacing this text._
+
+
+- What is the shape of the sampling distribution of the mean? How does it compare
+to when $n=5$ and $n=50$?
+
+_Type your answer here, replacing this text._
+
+
+- What is the mean of the sampling distribution of the mean?
+
+_Type your answer here, replacing this text._
+
+
+
+
+Suppose you have 500 classmates, and they have done this lab and added their data to this 
+sheet: https://docs.google.com/spreadsheets/d/1AXStOd618raoWvrBequxOh5CDwgisFJoHo50fmcKb_E/edit?usp=sharing
+
+Open the link, and look at the resulting sampling distributions for $n=5$, $n=50$, and $n=500$.
+This is what happens when you repeat the sampling 5,000 times.
+
+
+4. For which sample size should the sampling distribution of the mean be most normal?
+  
+  (a) n=5 
+  (b) n=50 
+  (c) n=500
+
+Assign your letter choice as a string. Example: sampleSize_answer<-"b"
+
+```{r}
+sampleSize_answer<- "REPLACE WITH a,b, or c. Keep the quotes"
+sampleSize_answer
+
+```
+
+```{r}
+. = ottr::check("tests/p4.R")
+```
+
+### Part 2: Poisson Distribution
+
+*5. How is a random variable determined to follow a Poisson distribution?*
+
+_Type your answer here, replacing this text._
+
+**Example from Baldi and Moore**
+
+The state of New York reported 1484 live births in which the infants had Down syndrome between 2006 and 2010, which averages to about 5.7 cases per week. While the causes of Down syndrome are not fully understood, it is reasonable to assume that live births are independent and the weekly rate is constant. Let X be the count of babies born with Down syndrome in New York in a given week.
+
+*6. What distribution does the random variable X approximately follow? Write it using notation learned in lecture. What are the possible values X can take?*
+
+_Type your answer here, replacing this text._
+
+
+*7. What are the mean and standard deviation of X?*
+
+```{r}
+mean <- NULL # YOUR CODE HERE
+sd <- NULL # YOUR CODE HERE
+
+
+mean
+sd
+```
+
+```{r}
+. = ottr::check("tests/p7.R")
+```
+
+*8. What is the probability that no child will be born with Down syndrome in a given week in New York? Calculate the probability by hand and confirm your answer in R by assigning p8 to a function that will calculate this probability.*
+
+```{r}
+p8 <- NULL # YOUR CODE HERE
+p8
+```
+
+```{r}
+. = ottr::check("tests/p8.R")
+```
+_Type your answer here, replacing this text._
+
+*9. What is the probability that 2 or more children will be born with Down syndrome in a given week in New York? Calculate the probability by hand and confirm your answer in R by assigning p9 to a function to calculate this probability..*
+
+```{r}
+p9 <- NULL # YOUR CODE HERE
+
+p9
+```
+
+```{r}
+. = ottr::check("tests/p9.R")
+```
+_Type your answer here, replacing this text._
+
+
+*10. Use R to calculate the probability that more than 12 children are born with Down syndrome in a given week in New York.*
+
+```{r}
+p10 <- NULL # YOUR CODE HERE
+
+p10
+```
+
+```{r}
+. = ottr::check("tests/p10.R")
+```
+
+### Submission
+
+For assignments in this class, you'll be submitting using the **Terminal** tab in the pane below. In order for the submission to work properly, make sure that:
+
+1. Any image files you add that are needed to knit the file are in the `src` folder and file paths are specified accordingly. 
+2. You **have not changed the file name** of the assignment.
+3. The file is saved (the file name in the tab should be **black**, not red with an asterisk).
+4. The file knits properly.
+
+Once you have checked these items, you can proceed to submit your assignment.
+
+1. Click on the **Terminal** tab in the pane below.
+2. Copy-paste the following line of code into the terminal and press enter.
+
+cd; cd ph142-su21/lab/lab07; python3 turn_in.py
+
+3. Follow the prompts to enter your Gradescope username and password. When entering your password, you won't see anything come up on the screen--don't worry! This is just for security purposes--just keep typing and hit enter.
+4. If the submission is successful, you should see "Submission successful!" appear as output.
+5. If the submission fails, try to diagnose the issue using the error messages--if you have problems, post on Piazza. 
+
+The late policy will be strictly enforced, **no matter the reason**, including submission issues, so be sure to submit early enough to have time to diagnose issues if problems arise.
+

@@ -1,0 +1,232 @@
+---
+title: "Assignment 8"
+author: "Your name and student ID"
+date: "Today's date"
+output:
+  pdf_document: default
+---
+
+```{r, warning=F, message=F, echo=F}
+library(dplyr)
+library(ggplot2)
+library(testthat)
+```
+
+* Solutions released: August 6*
+
+
+Helpful hints:
+
+-  Every function you need to use was taught during lecture! So you may need to revisit the lecture code to help you along by opening the relevant files on Datahub. 
+Alternatively, you may wish to view the code in the condensed PDFs posted on the course website. Good luck!
+
+- Knit your file early and often to minimize knitting errors! If you copy and paste code for the slides, you are bound to get an error that is hard to diagnose. Typing out the code is the way to smooth knitting! We recommend knitting your file each time after you write a few sentences/add a new code 
+chunk, so you can detect the source of knitting errors more easily. This will save you and the GSIs from frustration! **You must knit correctly before submitting.**
+
+- If your code runs off the page of the knitted PDF then you will LOSE POINTS! To avoid this, have a look at your knitted PDF and ensure all the code fits in the file (you can easily view it on Gradescope via the provided link after submitting). 
+If it doesn't look right, go back to your .Rmd file and add spaces (new lines) using the return or enter key so that the code runs onto the next line.
+
+\newpage
+
+## Section 1: Hemoglobin levels
+
+In two wards for elderly patients in a local hospital the following 
+levels of hemoglobin (grams per liter) were found for a simple random sample of
+patients from each ward.:
+
+Ward A: 
+```{r}
+ward_a <- c(12.2, 11.1, 14.0, 11.3, 10.8, 12.5, 12.2, 11.9, 13.6, 12.7, 13.4, 13.7)
+```
+
+Ward B: 
+```{r}
+ward_b <- c(11.9, 10.7, 12.3, 13.9, 11.1, 11.2, 13.3, 11.4, 12.0, 11.1)
+```
+
+```{r make-data-frame}
+hemoglobin <- data.frame(hemo_level = c(ward_a, ward_b), 
+                         ward = c(rep("Ward A", 12), rep("Ward B", 10)))
+```
+
+1. [1 point] In one ggplot, create two box plots to compare the hemoglobin values for Ward A and Ward B. Also plot the raw data as points, overlaid on top of the box plots. 
+
+```{r make-box-plot}
+p1 <- NULL # YOUR CODE HERE
+p1
+```
+
+```{r}
+. = ottr::check("tests/p1.R")
+```
+
+\newpage
+
+2. [1 points] Comment on the similarities/differences portrayed by the plots, keeping in mind that the sample size is relatively smallfor these two wards.
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+3. [2 points] What two assumptions do you need to make to use any of the t-procedures? Because each ward has a rather small sample size (n < 12 for both), what two characteristics of the data would you need to check for to ensure that the t-procedures can be applied?
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+4. [3 points] Using only `dplyr` and `*t` functions, create a 95% confidence interval for the mean difference between Ward A and Ward B. You can do this by using `dplyr` to calculate the inputs required to calculate the 95% CI, and then plugging these values in on a separate line of code (or using your calculator). Use a degrees of freedom of 19.515 (You don't need to calculate the degrees of freedom, you can use this value directly). Show your work and interpret the mean difference and its 95% CI. Round your solution to 3 decimal places.
+
+```{r}
+# YOUR CODE HERE
+
+# THEN, ASSIGN YOUR FINAL ANSWERS BELOW:
+CI_lowerbound <- 'YOUR ANSWER HERE'
+CI_upperbound <- 'YOUR ANSWER HERE'
+
+```
+
+```{r}
+. = ottr::check("tests/p4.R")
+```
+
+\newpage
+
+5. [1 points] Interpret the mean difference and its 95% CI you just calculated.
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+Perform a two-sided t-test for the difference between the two samples, where the null hypothesis is that the underlying means are the same. Start by writing down the null and alternate hypotheses, then calculate the test statistic (showing your work) and p-value. Continue to assume that the degrees of freedom is 19.515. Verify the p-value by running the t-test using R's built in function.
+Show the output from that test. Hint: to perform the t-test using R's built in function, you need to pass the function an x and y argument, where x includes that values for Ward A and Y includes the values for Ward B. `dplyr`'s `filter()`and `pull()` functions will be your friends.
+
+
+6. [1 point] Calculate the t-test statistics
+
+```{r}
+t_statistics <- NULL # YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/p6.R")
+```
+
+\newpage
+
+7. [1 point] We need to compare this t-statistic to a t distribution with 19.515 degrees of freedom:
+
+```{r}
+p_value <- NULL # YOUR CODE HERE
+p_value
+```
+
+```{r}
+. = ottr::check("tests/p7.R")
+```
+
+\newpage
+
+8.[2 points] Interpret the p value you got in the context of the this question. Are there evidence against null hypothesis?
+
+_Type your answer here, replacing this text._
+
+
+Check this against the `t.test` output:
+```{r}
+t.test(x = hemoglobin %>% filter(ward == "Ward A") %>% pull(hemo_level), 
+       y = hemoglobin %>% filter(ward == "Ward B") %>% pull(hemo_level), 
+       alternative = "two.sided")
+```
+
+\newpage
+
+The time to perform open heart surgery is normally distributed. Sixteen 
+patients (chosen as a simple random sample from a hospital) underwent open heart 
+surgery that took the following lengths of time (in minutes).
+
+```{r}
+op_time <- c(247.8648, 258.4343, 315.6787, 268.0563, 269.9372, 320.6821, 
+             280.5493, 225.3180, 243.8207, 251.5388, 304.9706, 277.3140, 
+             278.6247, 269.3418, 248.0131, 322.9812)
+surg_data <- data.frame(op_time)
+```
+
+9. [1 point] You wish to know if the mean operating time of open heart surgeries at this hospital exceeds four hours. Set up appropriate hypotheses for investigating
+this issue.
+
+_Type your answer here, replacing this text._
+
+
+\newpage
+
+10. [1 point] Test the hypotheses you formulated in part (a). Report the p-value. (Do not use the `t.test` function for this question)
+
+```{r}
+p_value_10 <- 'YOUR ANSWER HERE'
+p_value_10
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/p10.R")
+```
+
+\newpage
+
+11. [1 point] What are your conclusions in the context of the question? 
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+12. [3 points] Construct a 95% CI on the mean operating time (in hours).
+
+```{r}
+# YOUR CODE HERE
+
+# THEN, ASSIGN YOUR ANSWERS BELOW:
+CI_lowerbound_12 <- 'YOUR ANSWER HERE'
+CI_upperbound_12<-'YOUR ANSWER HERE'
+
+```
+
+```{r}
+. = ottr::check("tests/p12.R")
+```
+
+\newpage
+
+
+13. [1 point] Suppose you were testing the hypotheses $H_0: \mu_d = 0$ and $H_a: \mu_d \neq 0$ in a paired design and obtain a p-value of 0.21. Which one of the following could be a possible 95% confidence interval for $\mu_d$?
+
+```{r}
+# Uncomment one of the following choices:
+# p13 <- '-2.30 to -0.70'
+# p13 <- '-1.20 to 0.90'
+# p13 <- '1.50 to 3.80'
+# p13 <- '4.50 to 6.90'
+
+```
+
+```{r}
+. = ottr::check("tests/p13.R")
+```
+
+\newpage
+
+
+14. [1 point] Suppose you were testing the hypotheses $H_0: \mu_d = 0$ and $H_a: \mu_d \neq 0$ in a paired design and obtain a p-value of 0.02. Also suppose you computed confidence intervals for $\mu_d$. Based on the p-value which one of the following is true?
+
+```{r}
+# Uncomment one of the following choices:
+# p14 <- 'Both a 95% CI and a 99% CI will contain 0.'
+# p14 <- 'A 95% CI will contain 0, but a 99% CI will not.'
+# p14 <- 'A 95% CI will not contain 0, but a 99% CI will.'
+# p14 <- 'Neither a 95% CI nor a 99% CI interval will contain 0.' 
+
+```
+
+```{r}
+. = ottr::check("tests/p14.R")
+```

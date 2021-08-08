@@ -1,0 +1,15 @@
+library(testthat)
+
+test_metadata = "
+cases:
+- hidden: false
+  name: p4
+  points: 1
+name: p4
+
+"
+
+test_that("p4", {
+  expect_true(all.equal(p4, 0.06246437, tol = 0.01))
+  print("Checking: value of r_squared to two decimals")
+})

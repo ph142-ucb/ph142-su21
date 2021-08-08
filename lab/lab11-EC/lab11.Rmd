@@ -1,0 +1,121 @@
+---
+title: 'Lab 11 EC: The relationship between the chi-square test for independence and the two sample z test for proportions'
+output: pdf_document
+---
+
+
+### Instructions 
+* Due date: Friday, August 13 at 10:00pm PST with 2 hour grace period.
+* Late penalty: 50% late penalty if submitted within 24 hours of due date, no 
+marks for assignments submitted thereafter.
+* This assignment is graded on **correct completion**, all or nothing. You must pass all public tests and submit the assignment for credit.
+* Submission process: Follow the submission instructions on the final page. Make sure you do not remove any `\newpage` tags or rename this file, as this will break the submission.
+
+
+### The Western Collaborative Group Study Data Set
+
+The data we will look at for this week's lab comes from a cohort study conducted starting in the 1960s. These data were collected prospectively to assess the effects of behavior type on coronary heart disease (CHD). At the beginning of the study, 3524 men were enrolled, aged 39-59 who worked at a subset of corporations in California. Each individuals behavior type was assessed during an interview and  follow for this initial study extended for 8.5 years (until 1969). Full data is available for 3142 participants. Of these, 257 (8.2%) had a CHD event.
+
+### Overview of the lab
+
+The purpose of this lab is to investigate the relationship between the chi-square test of independence and the two sample z test for proportions. To do this, we will look at the relationship between personality type (`dibpat`) and CHD outcome (`chd69`) in a random sample of WCGS participants.
+
+Read in the data from the sample:
+
+```{r readdat, echo=F, message=F }
+library(readr)
+library(dplyr)
+
+dat <- read_csv("data/wcgs_n200.csv")
+head(dat)
+```
+
+In this sample, `chd69=1` implies that a CHD event occurred vs. `chd69=0` codes no CHD event. `dibpat0=1` codes participants with a "Type A" personality and  `dibpat0=0` codes participants with a "Type B" personality. Here, CHD is the response variable and personality type is the explanatory variable.
+
+1. State the null hypothesis of interest both as a test of independence and as a test of the equality of two probabilities.
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+2. Start by using a two sample z-test to test the null hypothesis that these two proportions are equal against a two-sided alternative hypothesis. You can use R as a calculator and dplyr functions to help with your calculations if you would like or you can do it by hand. Please do not round until the end. Report the p-value rounded to 4 decimal places.
+
+```{r}
+# your code here if you want to use R to help
+p_value <- "REPLACE WITH ANSWER ROUNDED TO 4 DEMICAL PLACES"
+p_value
+
+```
+
+```{r}
+. = ottr::check("tests/p2.R")
+```
+
+
+\newpage
+
+3. Check your p-value using the relevant R function for a two-sample z test for proportions. Note that to get the same p-value as that calculated by hand, you need to use `correct=F` as an argument to the function.
+
+```{r run-test-in-R}
+# your code here
+p_value_using_code <- "REPLACE WITH ANSWER ROUNDED TO 4 DEMICAL PLACES"
+p_value_using_code
+
+```
+
+```{r}
+. = ottr::check("tests/p3.R")
+```
+
+\newpage
+
+The above is the two sample z test comparing two proportions. However, this week in class we've learned about the chi-square test as applied to one or two categorical variables. When we have two categorical variables, we can use the chi-square test whether there is evidence that those variables are dependent.
+
+4. Make the 2X2 table of CHD vs. personality type and conduct the chi-square test by hand. You can do this on paper to make sure you understand those steps. The only part you will need R for is to compute the p-value. For this question, report the four values that will contribute to the chi-square statistic and the statistic itself.
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+5. Compare your chi-square test result to that given by R using the chisq.test() function. Remember, you need to send the `chisq.test` function a little 2X2 table to work. We did this in class on Wednesday. Also start off with `correct = F` so that we can compare to our hand calculation. Report your p-value rounded to 4 decimal places.
+
+```{r }
+# your code here
+p_value_chisq <- "REPLACE WITH ANSWER ROUNDED TO 4 DEMICAL PLACES"
+p_value_chisq
+
+```
+
+```{r}
+. = ottr::check("tests/p5.R")
+```
+
+\newpage
+
+6. Compare the chi-squared statistic to the z-statistic and to the (z-statistic)^2. What do you notice? What do you notice about the p-values for the two tests?
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+### Submission
+
+For assignments in this class, you'll be submitting using the **Terminal** tab in the pane below. In order for the submission to work properly, make sure that:
+
+1. Any image files you add that are needed to knit the file are in the `src` folder and file paths are specified accordingly. 
+2. You **have not changed the file name** of the assignment.
+3. The file is saved (the file name in the tab should be **black**, not red with an asterisk).
+4. The file knits properly.
+
+Once you have checked these items, you can proceed to submit your assignment.
+
+1. Click on the **Terminal** tab in the pane below.
+2. Copy-paste the following line of code into the terminal and press enter.
+
+cd; cd ph142-su21/lab/lab11; python3 turn_in.py
+
+3. Follow the prompts to enter your Gradescope username and password. When entering your password, you won't see anything come up on the screen--don't worry! This is just for security purposes--just keep typing and hit enter.
+4. If the submission is successful, you should see "Submission successful!" appear as output.
+5. If the submission fails, try to diagnose the issue using the error messages--if you have problems, post on Piazza. 
+
+The late policy will be strictly enforced, **no matter the reason**, including submission issues, so be sure to submit early enough to have time to diagnose issues if problems arise.

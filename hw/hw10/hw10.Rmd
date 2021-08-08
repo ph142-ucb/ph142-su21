@@ -1,0 +1,367 @@
+---
+title: "Homework 10"
+author: "Your name and student ID"
+date: "Today's date"
+output:
+  pdf_document: default
+---
+
+
+*Homeworks are for practice only this semester. Solutions will be released by the end of August 10*
+
+
+Helpful hints:
+
+-  Every function you need to use was taught during lecture! So you may need to 
+revisit the lecture code to help you along by opening the relevant files on Datahub. 
+Alternatively, you may wish to view the code in the condensed PDFs posted 
+on the course website. Good luck!
+
+- Knit your file early and often to minimize knitting errors! If you copy and 
+paste code for the slides, you are bound to get an error that is hard to 
+diagnose. Typing out the code is the way to smooth knitting! We recommend 
+knitting your file each time after you write a few sentences/add a new code 
+chunk, so you can detect the source of knitting errors more easily. This will 
+save you and the GSIs from frustration! **You must knit correctly before submitting.**
+
+- If your code runs off the page of the knitted PDF then you will LOSE POINTS! To
+avoid this, have a look at your knitted PDF and ensure all the code fits in the 
+file (you can easily view it on Gradescope via the provided link after submitting). 
+If it doesn't look right, go back to your .Rmd file and add spaces (new lines) using 
+the return or enter key so that the code runs onto the next line.
+
+\newpage
+
+
+You would like to conduct a survey of highschool students to determine the proportion who are current e-cigarettes users. Before you conduct your survey, you need to determine how large of a sample size. Suppose that you would like the width of the 95% confidence interval to be 5 percentage points.
+
+1. [1 point] Determine the most conservative sample size you would require and assign it to object p1. Recall that to do this, you need to use a $p^*$ of 0.5.
+
+```{r}
+p1 <- "YOUR ANSWER HERE" 
+# remember to remove " " if you want to store a number
+
+```
+
+```{r}
+. = ottr::check("tests/p1.R")
+```
+
+\newpage
+
+2. [1 point] You've seen a [recent publication](http://annals.org/aim/fullarticle/2698112/prevalence-distribution-e-cigarette-use-among-u-s-adults-behavioral) from the Annals of Internal Medicine that estimated that 9.2% of individuals aged 18 to 24 years old are current e-cigarette users. What is the sample size estimate assuming that $p^*=0.092$. 
+
+```{r}
+p2 <- "YOUR ANSWER HERE"
+# remember to remove " " if you want to store a number
+
+```
+
+```{r}
+. = ottr::check("tests/p2.R")
+```
+
+
+\newpage
+
+3. [1 point] The recent publication referenced in the previous question only looked at adults (aged 18+), but observed that the rate of current use was inversely related to age among the population they surveyed. Because of this finding would you suppose that the sample size estimated in part (b) is too low or too high?
+
+```{r}
+# Uncomment one of the following options:
+# p3 <- "Too low" 
+# p3 <- "Too high" 
+
+```
+
+```{r}
+. = ottr::check("tests/p3.R")
+```
+
+\newpage
+
+Exclusive breastfeeding during the first six months  of life is recommended for optimal 
+infant growth and development. Suppose that you conducted a survey of randomly chosen 
+women from California and found that 775 out of 5615 new mothers exclusively breast fed their infants.
+
+Perform all four of the methods discussed in lecture and during
+lab to create a 95% confidence interval for the proportion of infants 
+exclusively breast fed. 
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tibble)
+```
+
+Store your answer to p4-p7 using the following format:
+
+```{r eval = F}
+pX <- c(lowerbound, upperbound)
+
+# For example, if lowerbound = 10, upperbound = 20:
+pX <- c(10, 20)
+```
+
+4. [1 point] Use the large sample method of constructing a 95% CI. 
+
+```{r}
+# YOUR CODE HERE
+
+# Replace "lowerbound" and "upperbound" with your answer
+# If your answer is a number, make sure it doesn't have quotes around it
+p4 <- c("lowerbound", "upperbound")
+
+```
+```{r}
+. = ottr::check("tests/p4.R")
+```
+5. [1 point] Use the Clopper Pearson (Exact) method of constructing a 95% CI.
+
+```{r}
+# YOUR CODE HERE
+
+# Replace "lowerbound" and "upperbound" with your answer
+# If your answer is a number, make sure it doesn't have quotes around it
+p5 <- c("lowerbound", "upperbound")
+
+```
+```{r}
+. = ottr::check("tests/p5.R")
+```
+6. [1 point] Use the Wilson Score method of constructing a 95% CI with a continuity correction. 
+
+```{r}
+# YOUR CODE HERE
+
+# Replace "lowerbound" and "upperbound" with your answer
+# If your answer is a number, make sure it doesn't have quotes around it
+p6 <- c("lowerbound", "upperbound")
+
+```
+
+```{r}
+. = ottr::check("tests/p6.R")
+```
+
+7. [1 point] Use the Plus Four method of constructing a 95% CI. 
+
+```{r}
+# YOUR CODE HERE
+
+# Replace "lowerbound" and "upperbound" with your answer
+# If your answer is a number, make sure it doesn't have quotes around it
+p7 <- c("lowerbound", "upperbound")
+
+```
+
+```{r}
+. = ottr::check("tests/p7.R")
+```
+
+\newpage
+
+8. [2 points] Create a plot comparing the confidence intervals. If you are stuck, refer back to the example code presented in Lab 10. 
+
+```{r}
+p8 <- "YOUR ANSWER HERE"
+
+
+# NO AG FOR THIS QUESTION
+```
+
+\newpage 
+
+9. [1 point] Do the methods produce confidence intervals that are basically the same or very different? Why?
+
+_Type your answer here, replacing this text._
+
+\newpage 
+
+10. [1 point] Suppose that in 2010, the rate of exclusive breastfeeding in 
+California was known to be 18.6%. Based on the 95% CIs calculated in questions 4-7, is there evidence against the null hypothesis that the underlying rate is equal to 18.6% in 
+favor of the alternative that the rate is different from 18.6%?
+
+_Type your answer here, replacing this text._
+
+\newpage 
+
+To confirm your answer to Problem 9, perform a two-sided hypothesis test and interpret the p-value. 
+
+11. [1 point] State the null and alternative hypotheses:
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+12. [1 point] Calculate the test statistic:
+
+```{r}
+p12 <- "YOUR ANSWER HERE"
+
+```
+
+```{r}
+. = ottr::check("tests/p12.R")
+```
+
+\newpage
+
+13. [1 point] Calculate the p-value:
+
+```{r}
+p13 <- "YOUR ANSWER HERE"
+
+```
+```{r}
+. = ottr::check("tests/p13.R")
+```
+
+
+\newpage
+
+14. [1 point] Interpret the p-value:
+
+_Type your answer here, replacing this text._
+
+
+\newpage
+
+
+The quadrivalent HPV vaccine was introduced to Canada in 2007, and was given to girls in Ontario, Canada who were enrolled in grade 8 (13-14 year olds). Before 2007, no girls recieved the vaccine, while in the 4 years after it was introduced nearly 40% of girls recieved the vaccine each year. One concern that some people had was that the vaccine itself would increase promiscuity if the girls felt a false sense of protection, which could thereby increase the prevalence of other sexually transmitted infections (STIs) among vaccinated girls. [This paper](https://www.ncbi.nlm.nih.gov/pubmed/25487660) examines this question using an advanced method called the "regression discontinuity" design which harnesses the abrupt change in vaccination status across cohorts of girls to estimate the causal effect of vaccination against HPV on the occurrence of other STIs.
+
+Read only the abstract of the paper, and don't worry about the details because these are advanced methods. Note that the term "RD" is the difference in risk of STIs between girls exposed and unexposed to HPV vaccination. We can therefore think of this risk difference as the difference between two proportions.
+
+
+
+15. [1 point] Interpret this result from the abstract: We identified 15 441 (5.9%) cases of pregnancy and sexually transmitted infection and found no evidence that vaccination increased the risk of this composite outcome: RD per 1000 girls -0.61 (95% confidence interval [CI] -10.71 to 9.49). 
+
+**In particular, what does -0.61 estimate?**
+
+_Type your answer here, replacing this text._
+
+
+\newpage
+
+16. [1 point] The 95% confidence interval includes 0. What can you conclude about the p-value for a two-sided test of the difference between vaccinated and unvaccinated girls and their risk of sexually transmitted diseases?
+
+_Type your answer here, replacing this text._
+
+\newpage
+
+An allergy to peanuts is increasingly common in Western countries. A randomized controlled trial enrolled infants with a diagnosed peanut sensitivity. Infants were randomized to either avoid peanuts or to consume them regularly until they reached age 5. At the end of the study, 18 out of the 51 randomized to avoid peanuts were tested to be allergic to peanuts. Only 5 out of the 47 randomized to consuming them regularly were tested to be allergic to peanuts. 
+
+17. [1 point] Estimate the difference between the two proportions.
+
+```{r}
+p17 <- "YOUR ANSWER HERE"
+
+```
+
+```{r}
+. = ottr::check("tests/p17.R")
+```
+
+\newpage
+
+18. [1 point] Use the plus four method to find a 99% confidence interval for the difference between the two groups. Store the upper and lower bounds into an object called p18. 
+
+```{r}
+# YOUR CODE HERE
+
+# Replace "lowerbound" and "upperbound" with your answer
+# If your answer is a number, make sure it doesn't have quotes around it
+p18 <- c("lowerbound", "upperbound")
+
+```
+
+```{r}
+. = ottr::check("tests/p18.R")
+```
+
+\newpage
+
+19. [1 point] Why would it have been inappropriate to use the large sample method to create a 99% CI?
+
+_Type your answer here, replacing this text._
+
+
+\newpage
+
+Perform a two-sided hypothesis test for the difference between the groups. 
+Start by stating the null and alternative hypotheses, then calculate the test
+statistic, the p-value, and conclude with your interpretation of the p-value.
+
+
+20. [1 point] State the null and alternative hypotheses:
+
+_Type your answer here, replacing this text._
+
+
+
+\newpage 
+
+21. [1 point] Calculate the test statistic:
+
+```{r}
+p21 <- "YOUR ANSWER HERE"
+
+```
+
+```{r}
+. = ottr::check("tests/p21.R")
+```
+
+
+\newpage
+
+22. [1 point] Calculate the p-value:
+
+```{r}
+p22 <- "YOUR ANSWER HERE"
+
+```
+
+```{r}
+. = ottr::check("tests/p22.R")
+```
+
+\newpage
+
+23. [1 point] Interpret the p-value:
+
+_Type your answer here, replacing this text._
+
+
+\newpage
+
+24. [1 point] Suppose you were testing the hypotheses $H_0: \mu_d = 0$ and $H_a: \mu_d \neq 0$ in a paired design and obtain a p-value of 0.21. Which one of the following could
+be a possible 95% confidence interval for $\mu_d$?
+
+```{r}
+# Uncomment one of the following choices:
+# p24 <- "-2.30 to -0.70"
+# p24 <- "-1.20 to 0.90"
+# p24 <- "1.50 to 3.80"
+# p24 <- "4.50 to 6.90"
+
+```
+
+```{r}
+. = ottr::check("tests/p24.R")
+```
+
+\newpage 
+
+25. [1 point] Suppose you were testing the hypotheses $H_0: \mu_d = 0$ and $H_a: \mu_d \neq 0$ in a paired design and obtain a p-value of 0.02. Also suppose you computed confidence intervals for $\mu_d$. Based on the p-value which of the following are true?
+
+```{r}
+# Uncomment one of the following choices:
+# p25 <- "Both a 95% CI and a 99% CI will contain 0."
+# p25 <- "A 95% CI will contain 0, but a 99% CI will not."
+# p25 <- "A 95% CI will not contain 0, but a 99% CI will."
+# p25 <- "Neither a 95% CI nor a 99% CI interval will contain 0."
+
+```
+
+```{r}
+. = ottr::check("tests/p25.R")
+```

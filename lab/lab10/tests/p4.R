@@ -10,6 +10,6 @@ name: p4
 "
 
 test_that("p4", {
-  expect_true(all.equal(p4, 0.06246437, tol = 0.01))
+  expect_true(all.equal(p4, 0.06, tol = 0.01))
   print("Checking: value of r_squared to two decimals")
 })

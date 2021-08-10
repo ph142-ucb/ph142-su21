@@ -18,6 +18,6 @@ test_that("p1a", {
 })
 
 test_that("p1b", {
-  expect_true(all.equal(p_value, 0.001718342, tol = 0.0001))
+  expect_true(all.equal(p_value, 0.0017, tol = 0.0001))
   print("Checking: p-value to 4 decimal places")
 })
